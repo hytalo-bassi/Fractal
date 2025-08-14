@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if javac -d bin/ src/main/java/*/**/*.java; then
+	cd bin/
+	java Main
+fi
