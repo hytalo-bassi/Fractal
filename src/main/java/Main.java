@@ -1,6 +1,8 @@
 import core.FractalBinaryTree;
 import core.LSystemEngine;
 import core.impl.SimplePlant;
+import core.impl.BinaryTree;
+import core.impl.KochSnowflake;
 import graphics.Renderer;
 import java.awt.*;
 import java.awt.event.*;
@@ -25,7 +27,6 @@ class TurtlePanel extends JPanel implements ActionListener {
 	
 	private void update() {
 		instructions = lsystemEngine.generate(currentIteration);
-		// instructions = FractalBinaryTree.getString(currentIteration);
 	}
 
 
@@ -43,7 +44,7 @@ class TurtlePanel extends JPanel implements ActionListener {
 		setBackground(Color.white);
 
 		g.setColor(Color.BLACK);
-		g.drawString("L-System Animation - Iteration: " + currentIteration, 10, 25);
+		g.drawString("Iteration: " + currentIteration, 10, 25);
 		Graphics2D g2 = (Graphics2D) g;
 		Renderer renderer = new Renderer();
 		renderer.render(g2, instructions, new Point2D.Double(getWidth() / 2, getHeight()), currentIteration);
@@ -56,7 +57,7 @@ public class Main {
         JFrame frame = new JFrame("Turtle Graphics in Java");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        TurtlePanel panel = new TurtlePanel(new LSystemEngine(new SimplePlant()));
+        TurtlePanel panel = new TurtlePanel(new LSystemEngine(new KochSnowflake()));
         frame.add(panel);
 
         frame.setVisible(true);
