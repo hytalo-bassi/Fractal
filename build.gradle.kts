@@ -19,6 +19,13 @@ application {
     mainClass.set("Main")
 }
 
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testImplementation("org.mockito:mockito-core:5.1.1")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.1.1")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+}
+
 tasks.test {
     useJUnitPlatform()
 }
