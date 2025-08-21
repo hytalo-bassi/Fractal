@@ -1,6 +1,7 @@
 package core;
 
 import java.util.Map;
+import java.util.function.Function;
 
 // This is the simplest L-system rule set. To create more complex trees and structutures
 // there will be another kind of rule that comes the parametrized D0L-System. The difference
@@ -37,6 +38,22 @@ public interface LSystemRule {
      * @return Map of symbol -> replacement string
      */
     Map<Character, String> getProductionRules();
+
+    /**
+     * Gets the paremetric production rules for symbol transformation. The replacer function
+     * receives the list of Strings consisting of each argument then return a replacement String.
+     * @return Map of symbol -> replacer function
+     */
+    Map<Character, Function<String[], String>> getParametricProductionRules();
+    
+
+    /**
+     *  Returns true if rule supports parametric L-Systems
+     *  @return True if parDOL is supported 
+     */
+    default boolean hasParametric() {
+        return false;
+    }
     
     /**
      * Gets a human-readable description of this rule set

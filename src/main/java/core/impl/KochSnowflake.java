@@ -1,14 +1,18 @@
-
 package core.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+
 import core.LSystemRule;
 
-// Do not renders correctly, since the interpreter uses the constant 25 degree angle instead
+// 1. Do not renders correctly, since the interpreter uses the constant 25 degree angle instead
 // of the 60 degree angle that must be used. This can be solved by using the parDOL system (e.g +(60) and -(60))
 // or, in some way, force the interpreter to know how to change the angle and features of this
 // system.
+
+// 2. After implementing parametric L-systems, the rule still do not produce a good looking snowflake. Possible cause
+// is wrong algorithm, but it should be researched first. 
 
 /**
  * Implementation of Koch Snowflake using L system rules.
@@ -16,11 +20,14 @@ import core.LSystemRule;
  */
 public class KochSnowflake implements LSystemRule {
     
-    private static final String AXIOM = "F--F--F";
+    private static final String AXIOM = "F(100)A(-120)F(100)A(-120)F(100)";
     private final Map<Character, String> productionRules;
+    private final Map<Character, Function<String[], String>> parametricProductionRules;
+
     
     public KochSnowflake() {
         productionRules = createProductionRules();
+        parametricProductionRules = createParametricProductionRules();
     }
     
     private Map<Character, String> createProductionRules() {
@@ -28,7 +35,19 @@ public class KochSnowflake implements LSystemRule {
         rules.put('F', "F+F--F+F");
         return rules;
     }
+
+    private Map<Character, Function<String[], String>> createParametricProductionRules() {
+        Map<Character, Function<String[], String>> rules = new HashMap<>();
+
+        rules.put('F', (args) -> "F(100)A(60)F(100)A(-120)F(100)A(60)F(100)");
+        return rules;
+    }
     
+    @Override
+    public boolean hasParametric() {
+        return true;
+    }
+
     @Override
     public String getAxiom() {
         return AXIOM;
@@ -41,8 +60,13 @@ public class KochSnowflake implements LSystemRule {
     
     @Override
     public String getDescription() {
-        return "Simple Binary Tree" +
-               "0 represents leaves, F represents forward movements. " +
-               "Brackets [ ] represent branching points.";
+        return "Koch snowflake" +
+               "F represents forward movements " +
+               "A(x) turns the turtle `x` degrees";
+    }
+
+    @Override
+    public Map<Character, Function<String[], String>> getParametricProductionRules() {
+        return new HashMap<>(parametricProductionRules);
     }
 }

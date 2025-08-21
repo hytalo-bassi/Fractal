@@ -2,6 +2,8 @@ package core.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+
 import core.LSystemRule;
 
 /**
@@ -39,5 +41,11 @@ public class SimplePlant implements LSystemRule {
         return "Plant growth L-System with branching structures. " +
                "X represents growth points, F represents stem segments. " +
                "Brackets [ ] represent branching points.";
+    }
+
+    @Override
+    public Map<Character, Function<String[], String>> getParametricProductionRules() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getParametricProductionRules'");
     }
 }
