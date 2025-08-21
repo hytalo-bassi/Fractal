@@ -10,7 +10,7 @@ import java.util.function.Function;
  */
 public class LSystemEngine {
     private final LSystemRule rule;
-    
+
     /**
      * Creates a new L-System engine with the specified rules
      * @param rule The L-System rule set to use
@@ -18,7 +18,7 @@ public class LSystemEngine {
     public LSystemEngine(LSystemRule rule) {
         this.rule = rule;
     }
-    
+
     /**
      * Generates an L-System string for the specified number of iterations
      * @param iterations Number of iterations to apply
@@ -28,16 +28,16 @@ public class LSystemEngine {
         if (iterations < 0) {
             throw new IllegalArgumentException("Iterations must be non-negative");
         }
-        
+
         String current = rule.getAxiom();
-        
+
         for (int i = 0; i < iterations; i++) {
             current = applyRules(current);
         }
-        
+
         return current;
     }
-    
+
     /**
      * Applies production rules to transform the current string
      * @param input Current L-System string
@@ -46,32 +46,30 @@ public class LSystemEngine {
     private String applyRules(String input) {
         StringBuilder result = new StringBuilder();
         Map<Character, String> productionRules = rule.getProductionRules();
-        Map<Character, Function<String[], String>> paraProductionRules = null; // parametric production rules
-        
-        if (rule.hasParametric())
-            paraProductionRules = rule.getParametricProductionRules();
-        
+        Map<Character, Function<String[], String>> paraProductionRules =
+                null; // parametric production rules
+
+        if (rule.hasParametric()) paraProductionRules = rule.getParametricProductionRules();
+
         for (String symbol : splitSymbols(input)) {
             if (paraProductionRules != null) {
                 // The map always has a one character symbol in the beginning
-                Function<String[], String> replacementFunction = paraProductionRules.get(symbol.charAt(0));
+                Function<String[], String> replacementFunction =
+                        paraProductionRules.get(symbol.charAt(0));
 
-                result.append(replacementFunction != null
-                    ? replacementFunction.apply(splitParameters(symbol)) 
-                    : symbol
-                );
+                result.append(
+                        replacementFunction != null
+                                ? replacementFunction.apply(splitParameters(symbol))
+                                : symbol);
             } else {
                 String replacement = productionRules.get(symbol.charAt(0));
-                result.append(replacement != null
-                    ? replacement 
-                    : symbol.charAt(0));
+                result.append(replacement != null ? replacement : symbol.charAt(0));
             }
-            
         }
-        
+
         return result.toString();
     }
-    
+
     public static String[] splitParameters(String symbol) {
         // The smallest module symbol has 3 characters F()
         if (symbol.length() >= 3) {
@@ -101,16 +99,17 @@ public class LSystemEngine {
 
         int i = 0;
         while (i < input.length()) {
-            // The second predicate checks if the module starts at the end of the string meaning it is malformed!
+            // The second predicate checks if the module starts at the end of the string meaning it
+            // is malformed!
             // e.g: input = 'F('
             if (!readingModule && i + 1 < input.length() - 1 && input.charAt(i + 1) == '(') {
                 readingModule = true;
                 startOfModule = i;
                 i += 1; // jump over the '('
-            } else if (!readingModule){
+            } else if (!readingModule) {
                 listSymbols.add(String.valueOf(input.charAt(i)));
             }
-            
+
             if (readingModule && i < input.length() && input.charAt(i) == ')') {
                 listSymbols.add(input.substring(startOfModule, i + 1));
                 startOfModule = 0;
@@ -119,9 +118,13 @@ public class LSystemEngine {
 
             i++;
         }
-        
+
         if (readingModule) {
-            throw new Error("Malformed input: no module termination found! Module started at " + startOfModule + "\n\tInput string: " + input);
+            throw new Error(
+                    "Malformed input: no module termination found! Module started at "
+                            + startOfModule
+                            + "\n\tInput string: "
+                            + input);
         }
 
         return listSymbols.toArray(new String[0]);

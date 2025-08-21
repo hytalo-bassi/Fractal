@@ -10,17 +10,17 @@ import java.util.List;
  * Handles color schemes, stroke settings, and coordinate transformations.
  */
 public class Renderer {
-    
+
     private static final float BASE_STROKE_WIDTH = 2.0f;
     private static final float SATURATION = 0.8f;
     private static final float BRIGHTNESS = 0.9f;
-    
+
     private final TurtleGraphics interpreter;
-    
+
     public Renderer() {
         this.interpreter = new TurtleGraphics();
     }
-    
+
     /**
      * Renders an L-System string to the graphics context
      * @param g2d Graphics context to render to
@@ -32,14 +32,14 @@ public class Renderer {
         if (lSystemString == null || lSystemString.isEmpty()) {
             return;
         }
-        
+
         setupGraphicsContext(g2d, iteration);
-        
+
         TurtlePath path = interpreter.interpret(lSystemString, startPosition);
-        
+
         renderPath(g2d, path);
     }
-    
+
     /**
      * Sets up graphics context with appropriate colors and stroke
      */
@@ -47,13 +47,12 @@ public class Renderer {
         // Calculate color based on iteration
         Color color = calculateIterationColor(iteration);
         g2d.setColor(color);
-        
+
         // Set stroke
-        g2d.setStroke(new BasicStroke(BASE_STROKE_WIDTH, 
-                                    BasicStroke.CAP_ROUND, 
-                                    BasicStroke.JOIN_ROUND));
+        g2d.setStroke(
+                new BasicStroke(BASE_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     }
-    
+
     /**
      * Calculates color based on iteration number using HSB color space
      */
@@ -61,18 +60,18 @@ public class Renderer {
         float hue = (iteration * 60f) % 360f / 360f; // Cycle through hues
         return Color.getHSBColor(hue, SATURATION, BRIGHTNESS);
     }
-    
+
     /**
      * Renders the turtle path as line segments
      */
     private void renderPath(Graphics2D g2d, TurtlePath path) {
         List<Line2D.Double> lines = path.getLines();
-        
+
         for (Line2D.Double line : lines) {
             g2d.draw(line);
         }
     }
-    
+
     /**
      * Sets custom rendering parameters
      * @param strokeWidth Custom stroke width
