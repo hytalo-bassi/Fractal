@@ -1,4 +1,5 @@
 plugins {
+    id("com.diffplug.spotless") version "7.2.1"
     java
     application
 }
@@ -24,6 +25,29 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.1.1")
     testImplementation("org.mockito:mockito-junit-jupiter:5.1.1")
     testImplementation("org.assertj:assertj-core:3.24.2")
+}
+
+spotless {
+    format("misc") {
+        target("*.gradle", ".gitattributes", ".gitignore")
+
+        trimTrailingWhitespace()
+        leadingSpacesToTabs()
+        endWithNewline()
+    }
+
+    java {
+        target("src/*/java/**/*.java")
+
+        googleJavaFormat()
+            .aosp()
+            .reflowLongStrings()
+            .skipJavadocFormatting()
+
+        formatAnnotations()
+        importOrder()
+        removeUnusedImports()
+    }
 }
 
 tasks.test {
