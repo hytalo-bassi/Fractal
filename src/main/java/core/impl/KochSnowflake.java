@@ -4,6 +4,7 @@ import core.LSystemRule;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import utils.LStringBuilder;
 
 // 1. Do not renders correctly, since the interpreter uses the constant 25 degree angle instead
 // of the 60 degree angle that must be used. This can be solved by using the parDOL system (e.g
@@ -20,26 +21,37 @@ import java.util.function.Function;
  * Creates a snow flake.
  */
 public class KochSnowflake implements LSystemRule {
+    private final LStringBuilder builder = new LStringBuilder();
 
-    private static final String AXIOM = "F(100)A(-120)F(100)A(-120)F(100)";
-    private final Map<Character, String> productionRules;
+    private static final String AXIOM =
+            new LStringBuilder()
+                    .forward("100")
+                    .symbol('A', "-120")
+                    .forward("100")
+                    .symbol('A', "-120")
+                    .forward("100")
+                    .build();
+
     private final Map<Character, Function<String[], String>> parametricProductionRules;
 
     public KochSnowflake() {
-        productionRules = createProductionRules();
         parametricProductionRules = createParametricProductionRules();
-    }
-
-    private Map<Character, String> createProductionRules() {
-        Map<Character, String> rules = new HashMap<>();
-        rules.put('F', "F+F--F+F");
-        return rules;
     }
 
     private Map<Character, Function<String[], String>> createParametricProductionRules() {
         Map<Character, Function<String[], String>> rules = new HashMap<>();
 
-        rules.put('F', (args) -> "F(100)A(60)F(100)A(-120)F(100)A(60)F(100)");
+        rules.put(
+                'F',
+                (args) ->
+                        builder.forward("100")
+                                .symbol('A', "60")
+                                .forward("100")
+                                .symbol('A', "-120")
+                                .forward("100")
+                                .symbol('A', "60")
+                                .forward("100")
+                                .build());
         return rules;
     }
 
@@ -55,7 +67,7 @@ public class KochSnowflake implements LSystemRule {
 
     @Override
     public Map<Character, String> getProductionRules() {
-        return new HashMap<>(productionRules); // Return defensive copy
+        return new HashMap<>();
     }
 
     @Override

@@ -33,7 +33,7 @@ public class LStringBuilder {
      * @param params array of parameter strings to include with the symbol
      * @return this LStringBuilder instance for method chaining
      */
-    public LStringBuilder symbol(Character symbol, String[] params) {
+    public LStringBuilder symbol(Character symbol, String... params) {
         if (params == null || params.length == 0) {
             return symbol(symbol);
         }

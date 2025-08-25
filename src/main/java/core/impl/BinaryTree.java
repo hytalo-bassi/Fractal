@@ -4,29 +4,28 @@ import core.LSystemRule;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import utils.LStringBuilder;
 
 /**
  * Implementation of binary tree using L-System rules.
  * Creates branching structures that resemble a binary tree.
  */
 public class BinaryTree implements LSystemRule {
+    private final LStringBuilder builder = new LStringBuilder();
+    private final double initialQuantity = 25;
+    private final double constDecay = 0.1;
 
-    private static final String AXIOM = "0";
-    private final Map<Character, String> productionRules;
+    private static final String AXIOM = new LStringBuilder().forward("12").leaf().build();
     private final Map<Character, Function<String[], String>> parametricProductionRules;
 
     public BinaryTree() {
-        productionRules = createProductionRules();
         parametricProductionRules = createParametricProductionRules();
     }
 
-    private Map<Character, String> createProductionRules() {
-        Map<Character, String> rules = new HashMap<>();
-        rules.put('0', "F[+F0]-F0");
-        rules.put('F', "FF");
-        return rules;
-    }
-
+    /**
+     * Creates the parametric production rules
+     * @return The map linking a symbol -> replacement function
+     */
     private Map<Character, Function<String[], String>> createParametricProductionRules() {
         Map<Character, Function<String[], String>> rules = new HashMap<>();
 
@@ -37,21 +36,41 @@ public class BinaryTree implements LSystemRule {
                     if (args != null && args.length >= 1) {
                         try {
                             double lastStep = Double.parseDouble(args[0]);
-                            double currentStep =
-                                    lastStep + (25 * Math.exp(-0.1 * lastStep)); // step +
-                            // 25e^(-0.1*step)
+                            double currentStep = lastStep + expDecay(lastStep);
                             String formattedStep = String.format("%.2f", currentStep);
 
-                            return "F(" + formattedStep + ")";
+                            return builder.forward(formattedStep).build();
                         } catch (Exception e) {
-                            return "F(10)";
+                            return builder.forward("10").build();
                         }
                     }
 
-                    return "F(10)";
+                    return builder.forward("10").build();
                 });
-        rules.put('0', (args) -> "F(10)[+F(5)0]-F(5)0");
+        rules.put(
+                '0',
+                (args) ->
+                        builder.forward("10")
+                                .openBranch()
+                                .turnLeft()
+                                .forward("5")
+                                .leaf()
+                                .closeBranch()
+                                .turnRight()
+                                .forward("5")
+                                .leaf()
+                                .build());
+
         return rules;
+    }
+
+    /**
+     * Exponential decay function of x.
+     * @param x the last step
+     * @return the result of the exponential decay function
+     */
+    private double expDecay(double x) {
+        return initialQuantity * Math.exp(-constDecay * x);
     }
 
     @Override
@@ -66,12 +85,15 @@ public class BinaryTree implements LSystemRule {
 
     @Override
     public Map<Character, String> getProductionRules() {
-        return new HashMap<>(productionRules);
+        return new HashMap<>(); // empty because the LSystemEngine automatically
+        // chooses between parametric and normal production
+        // rules. Meaning that method is a dead code that
+        // should not ever run.
     }
 
     @Override
     public String getDescription() {
-        return "Simple Binary Tree"
+        return "Simple Binary Tree. "
                 + "0 represents leaves, F represents forward movements. "
                 + "Brackets [ ] represent branching points.";
     }
