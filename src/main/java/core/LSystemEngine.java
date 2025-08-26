@@ -9,7 +9,7 @@ import java.util.function.Function;
  * Handles the iterative application of production rules to generate L-system strings.
  */
 public class LSystemEngine {
-    private final LSystemRule rule;
+    private LSystemRule rule;
 
     /**
      * Creates a new L-System engine with the specified rules
@@ -85,6 +85,13 @@ public class LSystemEngine {
      */
     public LSystemRule getRule() {
         return rule;
+    }
+
+    /**
+     * Sets the current rule set
+     */
+    public void setRule(LSystemRule rule) {
+        this.rule = rule;
     }
 
     /**
