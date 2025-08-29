@@ -125,7 +125,8 @@ public class TurtleGraphics {
                 break;
 
             case 'A': // Turn arbitrarily
-                turtle.turn(Double.parseDouble(params[0]));
+                double rad = Math.toRadians(Double.parseDouble(params[0]));
+                turtle.turn(rad);
                 break;
 
             case '+': // Turn left

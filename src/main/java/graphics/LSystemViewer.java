@@ -2,13 +2,18 @@ package graphics;
 
 import javax.swing.JFrame;
 
+import core.RuleController;
+
 /**
  * Frame for displaying animated L-System turtle graphics.
  */
 public class LSystemViewer extends JFrame {
     public LSystemViewer() {
+        RuleController controller = new RuleController();
+        Renderer renderer = new Renderer();
+
         initializeFrame();
-        add(new LSystemPanel());
+        add(new LSystemPanel(controller, renderer));
         pack();
         setLocationRelativeTo(null);
     }

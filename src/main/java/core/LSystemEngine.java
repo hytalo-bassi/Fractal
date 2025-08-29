@@ -43,7 +43,7 @@ public class LSystemEngine {
      * @param input Current L-System string
      * @return Transformed string after applying rules
      */
-    private String applyRules(String input) {
+    public String applyRules(String input) {
         StringBuilder result = new StringBuilder();
         Map<Character, String> productionRules = rule.getProductionRules();
         Map<Character, Function<String[], String>> paraProductionRules =

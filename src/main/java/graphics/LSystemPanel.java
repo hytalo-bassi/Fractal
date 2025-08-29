@@ -27,12 +27,16 @@ public class LSystemPanel extends JPanel {
     private int currentIteration = 0;
     private String instructions;
     private final Timer animationTimer;
-    private final Renderer renderer = new Renderer();
-    private final RuleController controller = new RuleController();
+    private final Renderer renderer;
+    private final RuleController controller;
 
-    public LSystemPanel() {
+    public LSystemPanel(RuleController controller, Renderer renderer) {
+        this.controller = controller;
+        this.renderer = renderer;
+
         animationTimer = createAnimationTimer();
         this.lsystemEngine = new LSystemEngine(controller.getRule());
+        instructions = lsystemEngine.getRule().getAxiom();
 
         setBackground(BACKGROUND_COLOR);
         setFocusable(true);
@@ -52,8 +56,14 @@ public class LSystemPanel extends JPanel {
      * Update the L-System string and repaint
      */
     private void updateLSystem() {
-        currentIteration = (currentIteration + 1) % (MAX_ITERATIONS + 1);
-        instructions = lsystemEngine.generate(currentIteration);
+        if (currentIteration >= MAX_ITERATIONS) {
+            currentIteration = 0;
+            instructions = lsystemEngine.getRule().getAxiom();
+        } else {
+            currentIteration++;
+            instructions = lsystemEngine.applyRules(instructions);
+        }
+
         repaint();
     }
 
