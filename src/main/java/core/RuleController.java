@@ -3,6 +3,7 @@ package core;
 import core.impl.BinaryTree;
 import core.impl.KochSnowflake;
 import core.impl.SimplePlant;
+import core.impl.StochasticBinaryTree;
 import java.util.ArrayList;
 
 public class RuleController {
@@ -20,6 +21,7 @@ public class RuleController {
         registerRule(new BinaryTree());
         registerRule(new SimplePlant());
         registerRule(new KochSnowflake());
+        registerRule(new StochasticBinaryTree());
     }
 
     /**
