@@ -1,37 +1,74 @@
 # Fractal
 
-**Fractal** — some growing plants.
+A procedural plant generation system using L-systems (Lindenmayer systems) to create realistic growing plants and trees. Generate diverse plant structures with customizable parameters, stochastic variations, and real-time growth animations.
 
 ---
+
+## Quick Start
+1. Clone the repository: `git clone https://github.com/hytalo-bassi/Fractal/`
+2. Run the application: `./gradlew run`
+3. Use keyboard controls to interact:
+   - `Space`: Pause/unpause animation
+   - `S`: Generate new seed
+   - `LEFT/RIGHT arrow`: Switch between different L-systems
+
+## Videos
+
+### Binary Tree (parametric D0L-System)
+
+![](videos/binary_tree.gif)
+
+
+### Stochastic Binary Tree (parametric L-System stochastic extension)
+
+![](videos/stochastic_binary_tree.gif)
+
+### Simple Plant (The first L-System implemented)
+
+![](videos/simple_plant.gif)
+
+## Features
+
+- Multiple L-system implementations (D0L, stochastic)
+- Real-time interactive controls
+- Seed-based procedural generation
+- Anti-aliased rendering
+- Parametric plant modeling
+
+## What's that about?
+
+L-systems are parallel rewriting systems used to model the growth processes of plants. This project implements various L-system algorithms to generate realistic plant structures.
+
+The used algorithms are usually explained better at [docs/](docs).
 
 ## How to Use
 
 This project uses **Gradle** as its build system. Here are the most common commands:
 
-- **Run the project**
+### Running the Project
 ```bash
+# Run the application
 ./gradlew run
-```
 
-- **Run tests**
-```bash
+# Run tests
 ./gradlew test
-```
-- **Check code formatting**
-```bash
-./gradlew spotlessCheck
-```
 
-- **Automatically fix code formatting**
-```bash
+# Check code formatting
+./gradlew spotlessCheck
+
+# Fix code formatting automatically
 ./gradlew spotlessApply
 ```
 
-## Coding Conventions
+## Contributing
+
+Contributions are welcome! Please read below:
+
+### Coding Conventions
 
 We want our codebase to be readable, consistent, and maintainable. Please follow these guidelines:
 
-### Code Style
+#### Code Style
 
 - Prioritize readability over clever tricks.
 
@@ -43,7 +80,7 @@ We want our codebase to be readable, consistent, and maintainable. Please follow
 
 - Write comments only when necessary (the code should explain itself).
 
-### Git Conventions
+#### Git Conventions
 
 Follow Conventional Commits:
 - `feat`: – new feature
@@ -66,3 +103,24 @@ flexible modeling of growth patterns and parameterized plant structures.
 Also remember to:
 - Keep commits small and focused.
 - Use clear commit messages that describe what and why, not just how.
+
+## Roadmap
+
+**In Development**
+
+**Planned**
+
+- Realistic trunk and branches random radius.
+- (Almost) Random leaves shapes
+- Realistic (possibly multiple) colors to the wood and leaves. 
+
+**Under consideration**
+
+- Implementation of context-sensitive L-Systems
+- Generalization of types of trees (monopodial, sympodial, pleionomorphic and etc) in a range of L-systems (maybe it's not possible).
+
+**Recently Completed**
+- Stochastic Binary Trees
+- Antialiasing
+- Seed generation
+- Keyboard controls (change L-system, update seed, pause and unpause animation)
