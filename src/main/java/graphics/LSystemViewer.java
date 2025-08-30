@@ -1,8 +1,7 @@
 package graphics;
 
-import javax.swing.JFrame;
-
 import core.RuleController;
+import javax.swing.JFrame;
 
 /**
  * Frame for displaying animated L-System turtle graphics.

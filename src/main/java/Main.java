@@ -12,14 +12,15 @@ public class Main {
      */
     public static void main(String[] args) {
         // Opens L system window.
-        SwingUtilities.invokeLater(() -> {
-            try {
-                new LSystemViewer().setVisible(true);
-                
-            } catch (Exception e) {
-                System.err.println("Failed to start L-System viewer: " + e.getMessage());
-                e.printStackTrace();
-            }
-        });
+        SwingUtilities.invokeLater(
+                () -> {
+                    try {
+                        new LSystemViewer().setVisible(true);
+
+                    } catch (Exception e) {
+                        System.err.println("Failed to start L-System viewer: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                });
     }
 }
