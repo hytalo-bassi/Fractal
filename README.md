@@ -124,3 +124,14 @@ Also remember to:
 - Antialiasing
 - Seed generation
 - Keyboard controls (change L-system, update seed, pause and unpause animation)
+
+## Troubleshooting
+
+- **Unable to access jarfile Fractal/gradle/wrapper/gradle-wrapper.jar**
+
+   It's possible that the gradle-wrapper.jar was not generated. To fix this error, you must have Gradle and then run this command:
+  ```bash
+   gradle wrapper
+  ```
+
+   And the problem should be solved!
