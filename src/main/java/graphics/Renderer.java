@@ -1,9 +1,7 @@
 package graphics;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 /**
  * Renders L-System strings as graphics using turtle graphics interpretation.
@@ -45,8 +43,8 @@ public class Renderer {
      */
     private void setupGraphicsContext(Graphics2D g2d, int iteration) {
         // Calculate color based on iteration
-        Color color = calculateIterationColor(iteration);
-        g2d.setColor(color);
+        // Color color = calculateIterationColor(iteration);
+        // g2d.setColor(color);
 
         // Set stroke
         g2d.setStroke(
@@ -62,14 +60,10 @@ public class Renderer {
     }
 
     /**
-     * Renders the turtle path as line segments
+     * Renders the turtle path
      */
     private void renderPath(Graphics2D g2d, TurtlePath path) {
-        List<Line2D.Double> lines = path.getLines();
-
-        for (Line2D.Double line : lines) {
-            g2d.draw(line);
-        }
+        g2d.draw(path.getPath());
     }
 
     /**

@@ -1,6 +1,8 @@
 package graphics;
 
 import core.LSystemEngine;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Stack;
 import model.TurtleState;
@@ -11,11 +13,16 @@ import model.TurtleState;
  */
 public class TurtleGraphics {
 
+    private static final double DEFAULT_LEAF_SIZE = 5;
+    private static final double DEFAULT_LEAF_STEM_LENGTH = 1;
+    private static final double DEFAULT_LEAF_WIDTH_RATIO = 0.3;
     private static final double DEFAULT_ANGLE_INCREMENT = Math.toRadians(25); // 25 degrees
     private static final double DEFAULT_STEP_SIZE = 8.0;
 
     private final double angleIncrement;
     private final double stepSize;
+
+    private Path2D.Double cachedLeaf = null;
 
     /**
      * Creates interpreter with default parameters
@@ -49,11 +56,8 @@ public class TurtleGraphics {
                         Math.toRadians(90)); // Start pointing up
         Stack<TurtleState> stateStack = new Stack<>();
 
-        // for (char command : lSystemString.toCharArray()) {
-        //     processCommand(command, turtle, stateStack, path);
-        // }
         for (String symbol : LSystemEngine.splitSymbols(lSystemString)) {
-            // Modules always have more 3 characters
+            // Modules have more than 3 chars, normal symbols just one
             if (symbol.length() == 1) {
                 processCommand(symbol.charAt(0), turtle, stateStack, path);
             } else {
@@ -95,6 +99,9 @@ public class TurtleGraphics {
                 if (!stateStack.isEmpty()) {
                     turtle.copyFrom(stateStack.pop());
                 }
+                break;
+            case '0':
+                growLeaf(turtle, path);
                 break;
         }
     }
@@ -147,6 +154,74 @@ public class TurtleGraphics {
                 }
                 break;
         }
+    }
+
+    /**
+     * Grows one leaf and appends it to the tree. The leaf position and direction is determined
+     * by the last TurtleState.
+     * @param turtle the last TurtleState
+     * @param path the main path
+     */
+    private void growLeaf(TurtleState turtle, TurtlePath path) {
+        if (cachedLeaf == null) {
+            cachedLeaf =
+                    leafPath(DEFAULT_LEAF_SIZE, DEFAULT_LEAF_WIDTH_RATIO, DEFAULT_LEAF_STEM_LENGTH);
+        }
+
+        transformLeaf(path, turtle, cachedLeaf);
+    }
+
+    /**
+     * Transforms a leaf path, placing it a the last TurtleState's position and angle.
+     *
+     * @param path the main path to put the leaf.
+     * @param turtle the TurtleState holding positions and direction values.
+     * @param leafPath the actual leaf.
+     */
+    private void transformLeaf(TurtlePath path, TurtleState turtle, Path2D.Double leafPath) {
+        AffineTransform transform = new AffineTransform();
+        transform.translate(turtle.getX(), turtle.getY());
+        transform.rotate(
+                Math.toRadians(90)
+                        - turtle.getAngle()); // we need to do this subtraction due to the
+        // turtle initial state pointing up (90°).
+
+        path.append(leafPath.getPathIterator(transform), false);
+    }
+
+    private Path2D.Double leafPath(double size, double widthRatio, double stemLength) {
+        Path2D.Double leaf = new Path2D.Double();
+        double width = size * widthRatio;
+
+        leaf.moveTo(0, 0);
+
+        leaf.lineTo(0, -stemLength);
+
+        leaf.curveTo(
+                -width * 0.3,
+                -stemLength - size * 0.2, // Control point 1
+                -width,
+                -stemLength - size * 0.6, // Control point 2
+                -width * 0.7,
+                -stemLength - size);
+
+        leaf.curveTo(
+                -width * 0.3, -stemLength - size * 1.1, // Control point 1
+                width * 0.3, -stemLength - size * 1.1, // Control point 2
+                width * 0.7, -stemLength - size);
+
+        leaf.curveTo(
+                width,
+                -stemLength - size * 0.6, // Control point 1
+                width * 0.3,
+                -stemLength - size * 0.2, // Control point 2
+                0,
+                -stemLength);
+
+        leaf.lineTo(0, 0);
+
+        leaf.closePath();
+        return leaf;
     }
 
     /**

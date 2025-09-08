@@ -196,7 +196,7 @@ public class LSystemPanel extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        
+
         setAntialiasing(g2d);
 
         drawUIInfo(g2d);

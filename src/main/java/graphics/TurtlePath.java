@@ -1,23 +1,21 @@
 package graphics;
 
 import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 
 /**
  * Represents a path created by turtle graphics interpretation.
- * Contains a collection of line segments that form the complete drawing.
+ * Contains a complex path of curves and lines of the turtle.
  */
 public class TurtlePath {
-
-    private final List<Line2D.Double> lines;
+    private final Path2D.Double path;
 
     /**
      * Creates an empty turtle path
      */
     public TurtlePath() {
-        this.lines = new ArrayList<>();
+        this.path = new Path2D.Double();
     }
 
     /**
@@ -28,7 +26,8 @@ public class TurtlePath {
      * @param y2 Ending Y coordinate
      */
     public void addLine(double x1, double y1, double x2, double y2) {
-        lines.add(new Line2D.Double(x1, y1, x2, y2));
+        path.moveTo(x1, y1);
+        path.lineTo(x2, y2);
     }
 
     /**
@@ -36,57 +35,31 @@ public class TurtlePath {
      * @param line Line2D object to add
      */
     public void addLine(Line2D.Double line) {
-        lines.add(new Line2D.Double(line.x1, line.y1, line.x2, line.y2)); // Defensive copy
+        addLine(line.x1, line.y1, line.x2, line.y2);
     }
 
     /**
-     * Gets all line segments in the path
-     * @return Unmodifiable list of line segments
+     * Returns the path of the turtle
+     * @return the path
      */
-    public List<Line2D.Double> getLines() {
-        return Collections.unmodifiableList(lines);
+    public Path2D.Double getPath() {
+        Path2D.Double copiedPath = path;
+        return copiedPath; // it can be modified, but will not affect the instance's path
     }
 
     /**
-     * Gets the number of line segments in the path
-     * @return Number of line segments
+     * Append another path to the TurtlePath.
+     * @param newPath the path to be appended
+     * @param connect if true creates lines connecting the main path to the specified path
      */
-    public int getLineCount() {
-        return lines.size();
+    public void append(PathIterator newPath, boolean connect) {
+        path.append(newPath, connect);
     }
 
     /**
-     * Checks if the path is empty
-     * @return true if path contains no line segments
-     */
-    public boolean isEmpty() {
-        return lines.isEmpty();
-    }
-
-    /**
-     * Clears all line segments from the path
+     * Clears all path making it empty again.
      */
     public void clear() {
-        lines.clear();
-    }
-
-    /**
-     * Gets the total length of the path
-     * @return Sum of all line segment lengths
-     */
-    public double getTotalLength() {
-        return lines.stream()
-                .mapToDouble(
-                        line ->
-                                Math.sqrt(
-                                        Math.pow(line.x2 - line.x1, 2)
-                                                + Math.pow(line.y2 - line.y1, 2)))
-                .sum();
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "TurtlePath{lines=%d, totalLength=%.2f}", lines.size(), getTotalLength());
+        path.reset();
     }
 }
