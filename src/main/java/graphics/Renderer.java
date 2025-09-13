@@ -3,6 +3,8 @@ package graphics;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
+import graphics.TurtlePath.ColoredPath;
+
 /**
  * Renders L-System strings as graphics using turtle graphics interpretation.
  * Handles color schemes, stroke settings, and coordinate transformations.
@@ -10,8 +12,6 @@ import java.awt.geom.Point2D;
 public class Renderer {
 
     private static final float BASE_STROKE_WIDTH = 2.0f;
-    private static final float SATURATION = 0.8f;
-    private static final float BRIGHTNESS = 0.9f;
 
     private final TurtleGraphics interpreter;
 
@@ -42,36 +42,17 @@ public class Renderer {
      * Sets up graphics context with appropriate colors and stroke
      */
     private void setupGraphicsContext(Graphics2D g2d, int iteration) {
-        // Calculate color based on iteration
-        // Color color = calculateIterationColor(iteration);
-        // g2d.setColor(color);
-
-        // Set stroke
         g2d.setStroke(
                 new BasicStroke(BASE_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    }
-
-    /**
-     * Calculates color based on iteration number using HSB color space
-     */
-    private Color calculateIterationColor(int iteration) {
-        float hue = (iteration * 60f) % 360f / 360f; // Cycle through hues
-        return Color.getHSBColor(hue, SATURATION, BRIGHTNESS);
     }
 
     /**
      * Renders the turtle path
      */
     private void renderPath(Graphics2D g2d, TurtlePath path) {
-        g2d.draw(path.getPath());
-    }
-
-    /**
-     * Sets custom rendering parameters
-     * @param strokeWidth Custom stroke width
-     */
-    public void setStrokeWidth(float strokeWidth) {
-        // This could be extended to allow customization
-        // For now, keeping the renderer simple
+        for (ColoredPath coloredPath : path.getColoredPaths()) {
+            g2d.setColor(coloredPath.getColor());
+            g2d.draw(coloredPath.getPath());
+        }
     }
 }

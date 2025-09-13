@@ -1,6 +1,8 @@
 package graphics;
 
 import core.LSystemEngine;
+
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
@@ -48,7 +50,7 @@ public class TurtleGraphics {
      * @return TurtlePath containing the interpreted path
      */
     public TurtlePath interpret(String lSystemString, Point2D startPosition) {
-        TurtlePath path = new TurtlePath();
+        TurtlePath path = new TurtlePath(Color.getHSBColor(0.083f, 0.6f, 0.4f));
         TurtleState turtle =
                 new TurtleState(
                         startPosition.getX(),
@@ -186,7 +188,7 @@ public class TurtleGraphics {
                         - turtle.getAngle()); // we need to do this subtraction due to the
         // turtle initial state pointing up (90°).
 
-        path.append(leafPath.getPathIterator(transform), false);
+        path.append(leafPath.getPathIterator(transform), false, Color.getHSBColor(0.3333f, 0.8f, 0.7f));
     }
 
     private Path2D.Double leafPath(double size, double widthRatio, double stemLength) {
