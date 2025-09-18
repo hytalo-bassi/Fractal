@@ -1,8 +1,7 @@
 package model;
 
-import java.awt.Color;
-
 import core.LSystemRule;
+import java.awt.Color;
 
 public class PlantBuilder {
     private static final double DEFAULT_ANGLE_INCREMENT = Math.toRadians(25); // 25 degrees
@@ -31,10 +30,25 @@ public class PlantBuilder {
         return new PlantBuilder(rule, name);
     }
 
-    PlantBuilder setLineColor(Color lineColor) { this.lineColor = lineColor; return this; }
-    PlantBuilder setAngleIncrement(double angleIncrement) { this.angleIncrement = angleIncrement; return this; }
-    PlantBuilder setStartingAngle(double startingAngle) { this.startingAngle = startingAngle; return this; }
-    PlantBuilder setStepSize(double stepSize) { this.stepSize = stepSize; return this; }
+    PlantBuilder setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+        return this;
+    }
+
+    PlantBuilder setAngleIncrement(double angleIncrement) {
+        this.angleIncrement = angleIncrement;
+        return this;
+    }
+
+    PlantBuilder setStartingAngle(double startingAngle) {
+        this.startingAngle = startingAngle;
+        return this;
+    }
+
+    PlantBuilder setStepSize(double stepSize) {
+        this.stepSize = stepSize;
+        return this;
+    }
 
     Plant build() {
         return new Plant(lineColor, stepSize, angleIncrement, startingAngle, rule, name);

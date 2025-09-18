@@ -15,7 +15,7 @@ public class TurtlePath {
     private final Color color;
     private ColoredPath currentPath;
     private List<ColoredPath> coloredPaths;
-    
+
     /**
      * Creates an empty turtle path
      */
@@ -122,10 +122,17 @@ public class TurtlePath {
             path = new Path2D.Double();
         }
 
-        public void setColor(Color newColor) { color = newColor; }
+        public void setColor(Color newColor) {
+            color = newColor;
+        }
 
-        public Color getColor() { return this.color; }
-        public Path2D.Double getPath() { return path; }
+        public Color getColor() {
+            return this.color;
+        }
+
+        public Path2D.Double getPath() {
+            return path;
+        }
 
         public void append(PathIterator pi, boolean connect) {
             path.append(pi, connect);
@@ -138,6 +145,5 @@ public class TurtlePath {
         public void lineTo(double x, double y) {
             path.lineTo(x, y);
         }
-
     }
 }

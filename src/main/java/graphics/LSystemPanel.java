@@ -2,7 +2,6 @@ package graphics;
 
 import core.LSystemEngine;
 import core.RandomSingleton;
-import core.RuleController;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,6 +15,7 @@ import javax.swing.InputMap;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
+import model.PlantController;
 
 /**
  * Panel that displays animated L-System turtle graphics.
@@ -31,11 +31,11 @@ public class LSystemPanel extends JPanel {
     private String instructions;
     private final Timer animationTimer;
     private final Renderer renderer;
-    private final RuleController controller;
+    private final PlantController controller;
 
     private boolean paused = false;
 
-    public LSystemPanel(RuleController controller, Renderer renderer) {
+    public LSystemPanel(PlantController controller, Renderer renderer) {
         this.controller = controller;
         this.renderer = renderer;
 
@@ -90,6 +90,7 @@ public class LSystemPanel extends JPanel {
         g2d.setColor(Color.BLACK);
         g2d.drawString("Iteration: " + currentIteration, 10, 25);
         g2d.drawString("Seed: " + seed, 10, 50);
+        g2d.drawString("Name: " + controller.getName(), 10, 75);
     }
 
     /**
@@ -175,7 +176,7 @@ public class LSystemPanel extends JPanel {
      * Switches to a different L-System rule and resets animation and instructions.
      * @param updatedController the rule controller after shifting operation
      */
-    private void switchRule(RuleController updatedController) {
+    private void switchRule(PlantController updatedController) {
         lsystemEngine.setRule(updatedController.getRule());
         currentIteration = 0;
         instructions = lsystemEngine.getRule().getAxiom();

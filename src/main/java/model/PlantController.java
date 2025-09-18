@@ -1,13 +1,12 @@
 package model;
 
-import java.util.ArrayList;
-import java.awt.Color;
-
 import core.LSystemRule;
 import core.impl.BinaryTree;
 import core.impl.KochSnowflake;
 import core.impl.SimplePlant;
 import core.impl.StochasticBinaryTree;
+import java.awt.Color;
+import java.util.ArrayList;
 
 public class PlantController {
     private ArrayList<Plant> plants;
@@ -26,31 +25,23 @@ public class PlantController {
 
     private void setDefaultPlants() {
         registerPlant(
-            PlantBuilder
-                .start(new StochasticBinaryTree(), "Stochastic Binary Tree")
-                .setLineColor(Color.getHSBColor(0.083f, 0.6f, 0.4f))
-                .build()
-        );
+                PlantBuilder.start(new StochasticBinaryTree(), "Stochastic Binary Tree")
+                        .setLineColor(Color.getHSBColor(0.083f, 0.6f, 0.4f))
+                        .build());
         registerPlant(
-            PlantBuilder
-                .start(new BinaryTree(), "Binary Tree")
-                .setLineColor(Color.getHSBColor(0.083f, 0.6f, 0.4f))
-                .build()
-        );
+                PlantBuilder.start(new BinaryTree(), "Binary Tree")
+                        .setLineColor(Color.getHSBColor(0.083f, 0.6f, 0.4f))
+                        .build());
         registerPlant(
-            PlantBuilder
-                .start(new SimplePlant(), "Simple Plant")
-                .setLineColor(Color.getHSBColor(0.3333f, 0.8f, 0.7f))
-                .build()
-        );
+                PlantBuilder.start(new SimplePlant(), "Simple Plant")
+                        .setLineColor(Color.getHSBColor(0.3333f, 0.8f, 0.7f))
+                        .build());
         registerPlant(
-            PlantBuilder
-                .start(new KochSnowflake(), "Koch Snow Flake")
-                .setLineColor(Color.BLUE)
-                .build()
-        );
+                PlantBuilder.start(new KochSnowflake(), "Koch Snow Flake")
+                        .setLineColor(Color.BLUE)
+                        .build());
     }
-    
+
     public PlantController shiftRight() {
         currentIndex = (currentIndex + 1) % plants.size();
 
@@ -67,12 +58,16 @@ public class PlantController {
         if (plant != null) plants.add(plant);
     }
 
-    public LSystemRule getRule() { return plants.get(currentIndex).getRule(); }
-    public String getName() { return plants.get(currentIndex).getName(); }
+    public LSystemRule getRule() {
+        return plants.get(currentIndex).getRule();
+    }
+
+    public String getName() {
+        return plants.get(currentIndex).getName();
+    }
 
     public static PlantController getInstance() {
-        if (PlantController.instance != null)
-            return PlantController.instance;
+        if (PlantController.instance != null) return PlantController.instance;
         return new PlantController();
     }
 }

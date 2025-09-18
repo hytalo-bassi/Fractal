@@ -1,14 +1,14 @@
 package graphics;
 
-import core.RuleController;
 import javax.swing.JFrame;
+import model.PlantController;
 
 /**
  * Frame for displaying animated L-System turtle graphics.
  */
 public class LSystemViewer extends JFrame {
     public LSystemViewer() {
-        RuleController controller = new RuleController();
+        PlantController controller = PlantController.getInstance();
         Renderer renderer = new Renderer();
 
         initializeFrame();

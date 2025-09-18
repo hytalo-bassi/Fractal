@@ -1,9 +1,8 @@
 package graphics;
 
+import graphics.TurtlePath.ColoredPath;
 import java.awt.*;
 import java.awt.geom.Point2D;
-
-import graphics.TurtlePath.ColoredPath;
 
 /**
  * Renders L-System strings as graphics using turtle graphics interpretation.
