@@ -1,10 +1,11 @@
 package core;
 
-import core.impl.BinaryTree;
-import core.impl.KochSnowflake;
-import core.impl.SimplePlant;
-import core.impl.StochasticBinaryTree;
 import java.util.ArrayList;
+
+import core.impl.trees.BinaryTree;
+import core.impl.trees.KochSnowflake;
+import core.impl.trees.SimplePlant;
+import core.impl.trees.StochasticBinaryTree;
 
 public class RuleController {
     private ArrayList<LSystemRule> rules;

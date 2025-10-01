@@ -1,4 +1,4 @@
-package core.impl;
+package core.impl.trees;
 
 import core.LSystemRule;
 import java.util.HashMap;
