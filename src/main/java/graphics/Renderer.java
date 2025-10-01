@@ -3,6 +3,7 @@ package graphics;
 import graphics.TurtlePath.ColoredPath;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import model.Plant;
 
 /**
  * Renders L-System strings as graphics using turtle graphics interpretation.
@@ -16,6 +17,14 @@ public class Renderer {
 
     public Renderer() {
         this.interpreter = new TurtleGraphics();
+    }
+
+    public Renderer(Plant plant) {
+        this.interpreter = new TurtleGraphics(plant);
+    }
+
+    public void updatesInterpreter(Plant newPlant) {
+        interpreter.updatesInterpretation(newPlant);
     }
 
     /**

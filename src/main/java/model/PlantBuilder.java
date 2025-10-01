@@ -4,8 +4,8 @@ import core.LSystemRule;
 import java.awt.Color;
 
 public class PlantBuilder {
-    private static final double DEFAULT_ANGLE_INCREMENT = Math.toRadians(25); // 25 degrees
-    private static final double DEFAULT_STARTING_ANGLE = Math.toRadians(90);
+    private static final double DEFAULT_ANGLE_INCREMENT = 25; // degrees
+    private static final double DEFAULT_STARTING_ANGLE = 90;
     private static final double DEFAULT_STEP_SIZE = 8.0;
     private static final Color DEFAULT_LINE_COLOR = Color.BLACK;
 

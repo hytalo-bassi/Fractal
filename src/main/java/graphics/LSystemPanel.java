@@ -178,6 +178,7 @@ public class LSystemPanel extends JPanel {
      */
     private void switchRule(PlantController updatedController) {
         lsystemEngine.setRule(updatedController.getRule());
+        renderer.updatesInterpreter(controller.getPlant());
         currentIteration = 0;
         instructions = lsystemEngine.getRule().getAxiom();
         repaint();

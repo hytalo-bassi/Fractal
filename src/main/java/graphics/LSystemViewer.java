@@ -9,7 +9,7 @@ import model.PlantController;
 public class LSystemViewer extends JFrame {
     public LSystemViewer() {
         PlantController controller = PlantController.getInstance();
-        Renderer renderer = new Renderer();
+        Renderer renderer = new Renderer(controller.getPlant());
 
         initializeFrame();
         add(new LSystemPanel(controller, renderer));

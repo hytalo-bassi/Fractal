@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Stack;
+import model.Plant;
 import model.TurtleState;
 
 /**
@@ -17,11 +18,17 @@ public class TurtleGraphics {
     private static final double DEFAULT_LEAF_SIZE = 5;
     private static final double DEFAULT_LEAF_STEM_LENGTH = 1;
     private static final double DEFAULT_LEAF_WIDTH_RATIO = 0.3;
-    private static final double DEFAULT_ANGLE_INCREMENT = Math.toRadians(25); // 25 degrees
+    private static final double DEFAULT_ANGLE_INCREMENT = 25;
     private static final double DEFAULT_STEP_SIZE = 8.0;
+    private static final Color DEFAULT_LINE_COLOR = Color.getHSBColor(0, 0, 0);
+    private static final double DEFAULT_STARTING_ANGLE = 90;
+    private static final Color DEFAULT_LEAF_COLOR = Color.getHSBColor(0.3333f, 0.8f, 0.7f);
 
-    private final double angleIncrement;
-    private final double stepSize;
+    private double startingAngle;
+    private double angleIncrement;
+    private double stepSize;
+    private Color lineColor;
+    private Color leafColor;
 
     private Path2D.Double cachedLeaf = null;
 
@@ -29,17 +36,48 @@ public class TurtleGraphics {
      * Creates interpreter with default parameters
      */
     public TurtleGraphics() {
-        this(DEFAULT_ANGLE_INCREMENT, DEFAULT_STEP_SIZE);
+        this(
+                DEFAULT_ANGLE_INCREMENT,
+                DEFAULT_STEP_SIZE,
+                DEFAULT_STARTING_ANGLE,
+                DEFAULT_LINE_COLOR,
+                DEFAULT_LEAF_COLOR);
     }
 
     /**
      * Creates interpreter with custom parameters
-     * @param angleIncrement Angle increment for turns (in radians)
+     * @param angleIncrement Angle increment for turns
      * @param stepSize Step size for forward movement
      */
-    public TurtleGraphics(double angleIncrement, double stepSize) {
-        this.angleIncrement = angleIncrement;
+    public TurtleGraphics(
+            double angleIncrement,
+            double stepSize,
+            double startingAngle,
+            Color lineColor,
+            Color leafColor) {
+        this.angleIncrement = Math.toRadians(angleIncrement);
         this.stepSize = stepSize;
+        this.startingAngle = Math.toRadians(startingAngle);
+        this.lineColor = lineColor;
+        this.leafColor = leafColor;
+    }
+
+    public TurtleGraphics(Plant plant) {
+        this(
+                plant.getDefaultAngleIncrement(),
+                plant.getDefaultStepSize(),
+                plant.getStartingAngle(),
+                plant.getLineColor(),
+                DEFAULT_LEAF_COLOR);
+    }
+
+    public void updatesInterpretation(Plant newPlant) {
+
+        this.angleIncrement = Math.toRadians(newPlant.getDefaultAngleIncrement());
+        this.stepSize = newPlant.getDefaultStepSize();
+        this.startingAngle = Math.toRadians(newPlant.getStartingAngle());
+        this.lineColor = newPlant.getLineColor();
+        this.leafColor = DEFAULT_LEAF_COLOR;
     }
 
     /**
@@ -49,12 +87,9 @@ public class TurtleGraphics {
      * @return TurtlePath containing the interpreted path
      */
     public TurtlePath interpret(String lSystemString, Point2D startPosition) {
-        TurtlePath path = new TurtlePath(Color.getHSBColor(0.083f, 0.6f, 0.4f));
+        TurtlePath path = new TurtlePath(lineColor);
         TurtleState turtle =
-                new TurtleState(
-                        startPosition.getX(),
-                        startPosition.getY(),
-                        Math.toRadians(90)); // Start pointing up
+                new TurtleState(startPosition.getX(), startPosition.getY(), startingAngle);
         Stack<TurtleState> stateStack = new Stack<>();
 
         for (String symbol : LSystemEngine.splitSymbols(lSystemString)) {
@@ -183,12 +218,9 @@ public class TurtleGraphics {
         AffineTransform transform = new AffineTransform();
         transform.translate(turtle.getX(), turtle.getY());
         transform.rotate(
-                Math.toRadians(90)
-                        - turtle.getAngle()); // we need to do this subtraction due to the
-        // turtle initial state pointing up (90°).
+                startingAngle - turtle.getAngle()); // this subtraction corrects the leaf angle
 
-        path.append(
-                leafPath.getPathIterator(transform), false, Color.getHSBColor(0.3333f, 0.8f, 0.7f));
+        path.append(leafPath.getPathIterator(transform), false, leafColor);
     }
 
     private Path2D.Double leafPath(double size, double widthRatio, double stemLength) {
