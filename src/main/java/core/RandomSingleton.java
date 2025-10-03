@@ -32,7 +32,7 @@ import java.util.SplittableRandom;
  * <p><strong>Note:</strong> This implementation is NOT thread-safe. If used in a
  * multi-threaded environment, external synchronization is required.</p>
  *
- * @author [Your Name]
+ * @author Hytalo Bassi
  * @version 1.0
  * @since 1.0
  */
