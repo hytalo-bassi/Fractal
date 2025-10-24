@@ -1,6 +1,9 @@
 package graphics;
 
+import core.BaseLeaf;
 import core.LSystemEngine;
+import core.impl.leafs.SimpleLeaf;
+
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -50,8 +53,8 @@ public class TurtleGraphics {
     /** Default stem length for leaves. */
     private static final double DEFAULT_LEAF_STEM_LENGTH = 1;
 
-    /** Default width-to-length ratio for leaves. */
-    private static final double DEFAULT_LEAF_WIDTH_RATIO = 0.3;
+    /** Default width for leaves. */
+    private static final double DEFAULT_LEAF_WIDTH = 1.5;
 
     /** Default angle increment for turns (in degrees). */
     private static final double DEFAULT_ANGLE_INCREMENT = 25;
@@ -83,8 +86,13 @@ public class TurtleGraphics {
     /** The color used for rendering leaves. */
     private Color leafColor;
 
-    /** Cached leaf path to avoid recreating the same geometry. */
-    private Path2D.Double cachedLeaf = null;
+    /** The leaf instance. */
+    private BaseLeaf leaf = new SimpleLeaf(
+        DEFAULT_LEAF_STEM_LENGTH,
+        DEFAULT_LEAF_WIDTH,
+        DEFAULT_LEAF_SIZE
+    );
+    // TODO: Get leaf instances from outside the TurtleGraphics.
 
     /**
      * Constructs a TurtleGraphics interpreter with default parameters.
@@ -317,12 +325,7 @@ public class TurtleGraphics {
      * @param path the path to which the leaf will be appended
      */
     private void growLeaf(TurtleState turtle, TurtlePath path) {
-        if (cachedLeaf == null) {
-            cachedLeaf =
-                    leafPath(DEFAULT_LEAF_SIZE, DEFAULT_LEAF_WIDTH_RATIO, DEFAULT_LEAF_STEM_LENGTH);
-        }
-
-        transformLeaf(path, turtle, cachedLeaf);
+        transformLeaf(path, turtle, leaf.getLeafPath());
     }
 
     /**
@@ -346,53 +349,6 @@ public class TurtleGraphics {
         path.append(leafPath.getPathIterator(transform), false, leafColor);
     }
 
-    /**
-     * Creates a leaf-shaped path geometry with the specified dimensions.
-     * <p>
-     * This method generates a stylized leaf shape using Bézier curves to create
-     * smooth, organic-looking edges. The leaf consists of a stem and a body with
-     * bilateral symmetry around the vertical axis.
-     * </p>
-     *
-     * @param size the overall length of the leaf body (excluding stem)
-     * @param widthRatio the ratio of leaf width to its length
-     * @param stemLength the length of the leaf stem
-     * @return a Path2D representing the leaf geometry
-     */
-    private Path2D.Double leafPath(double size, double widthRatio, double stemLength) {
-        Path2D.Double leaf = new Path2D.Double();
-        double width = size * widthRatio;
-
-        leaf.moveTo(0, 0);
-
-        leaf.lineTo(0, -stemLength);
-
-        leaf.curveTo(
-                -width * 0.3,
-                -stemLength - size * 0.2, // Control point 1
-                -width,
-                -stemLength - size * 0.6, // Control point 2
-                -width * 0.7,
-                -stemLength - size);
-
-        leaf.curveTo(
-                -width * 0.3, -stemLength - size * 1.1, // Control point 1
-                width * 0.3, -stemLength - size * 1.1, // Control point 2
-                width * 0.7, -stemLength - size);
-
-        leaf.curveTo(
-                width,
-                -stemLength - size * 0.6, // Control point 1
-                width * 0.3,
-                -stemLength - size * 0.2, // Control point 2
-                0,
-                -stemLength);
-
-        leaf.lineTo(0, 0);
-
-        leaf.closePath();
-        return leaf;
-    }
 
     /**
      * Moves the turtle forward by the default step size, optionally drawing a line.
